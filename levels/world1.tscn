@@ -1,0 +1,207 @@
+[gd_scene load_steps=25 format=3 uid="uid://c37dlwfewhxgm"]
+
+[ext_resource type="Script" path="res://lib/world.gd" id="1_jhvva"]
+[ext_resource type="Script" path="res://lib/spawn_point.gd" id="2_5pt2i"]
+[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="3_hyhmt"]
+[ext_resource type="Resource" path="res://models/architecture/h_data_terrain/data.hterrain" id="4_2gngr"]
+[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain_texture_set.gd" id="4_ke73b"]
+[ext_resource type="Texture2D" uid="uid://u4lthd6u7ntg" path="res://assets/textures/terrain_texture/world1_slot0_albedo_bump.png" id="6_2kfly"]
+[ext_resource type="Texture2D" uid="uid://bu1m738d75bfh" path="res://assets/textures/terrain_texture/world1_slot1_albedo_bump.png" id="7_nk5jc"]
+[ext_resource type="Texture2D" uid="uid://besq54i6qghxi" path="res://assets/textures/terrain_texture/world1_slot2_albedo_bump.png" id="8_ldnhg"]
+[ext_resource type="Texture2D" uid="uid://5olxnqdj2lbj" path="res://assets/textures/terrain_texture/world1_slot3_albedo_bump.png" id="9_5eto2"]
+[ext_resource type="Texture2D" uid="uid://b051bxvhlslme" path="res://assets/textures/terrain_texture/world1_slot0_normal_roughness.png" id="10_7unpd"]
+[ext_resource type="Texture2D" uid="uid://u4k11m1lqm7b" path="res://assets/textures/terrain_texture/world1_slot1_normal_roughness.png" id="11_qqixd"]
+[ext_resource type="Texture2D" uid="uid://bfl472rfvcdx8" path="res://assets/textures/terrain_texture/world1_slot2_normal_roughness.png" id="12_1u4gr"]
+[ext_resource type="Texture2D" uid="uid://bep75l0dcwqud" path="res://assets/textures/terrain_texture/world1_slot3_normal_roughness.png" id="13_jodas"]
+[ext_resource type="PackedScene" uid="uid://dmqdscvoojc8h" path="res://models/architecture/temple.tscn" id="17_2cr3x"]
+[ext_resource type="PackedScene" uid="uid://dl1mds1ums6n2" path="res://scenes/goblin.tscn" id="17_cgy6g"]
+[ext_resource type="PackedScene" uid="uid://v0fik1iqbho0" path="res://scenes/apple.tscn" id="18_tx6l7"]
+[ext_resource type="PackedScene" uid="uid://dipml867h6dhx" path="res://scenes/tree_with_apple.tscn" id="19_3frmk"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tuiju"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_qtr8k"]
+sky_material = SubResource("ProceduralSkyMaterial_tuiju")
+
+[sub_resource type="Environment" id="Environment_gxalh"]
+background_mode = 2
+sky = SubResource("Sky_qtr8k")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="Resource" id="Resource_qp08j"]
+script = ExtResource("4_ke73b")
+mode = 0
+textures = [[ExtResource("6_2kfly"), ExtResource("7_nk5jc"), ExtResource("8_ldnhg"), ExtResource("9_5eto2")], [ExtResource("10_7unpd"), ExtResource("11_qqixd"), ExtResource("12_1u4gr"), ExtResource("13_jodas")]]
+
+[sub_resource type="LabelSettings" id="LabelSettings_whbkj"]
+font_size = 48
+font_color = Color(0.419608, 0, 0.0588235, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j7thk"]
+size = Vector3(1, 2, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_an2o4"]
+font_size = 37
+font_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+
+[node name="World1" type="Node3D"]
+script = ExtResource("1_jhvva")
+key = "world1"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_gxalh")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="SpawnPoint" type="Node3D" parent="."]
+transform = Transform3D(0.424768, 0, 0.905302, 0, 1, 0, -0.905302, 0, 0.424768, 201.802, 119.934, 420.86)
+script = ExtResource("2_5pt2i")
+
+[node name="HTerrain" type="Node3D" parent="."]
+script = ExtResource("3_hyhmt")
+_terrain_data = ExtResource("4_2gngr")
+chunk_size = 16
+collision_enabled = true
+collision_layer = 1
+collision_mask = 13
+shader_type = "Classic4Lite"
+custom_shader = null
+custom_globalmap_shader = null
+texture_set = SubResource("Resource_qp08j")
+render_layers = 1
+cast_shadow = 1
+shader_params/u_ground_uv_scale = 20.0
+shader_params/u_depth_blending = true
+shader_params/u_triplanar = null
+shader_params/u_tile_reduction = Vector4(1, 1, 0, 0)
+
+[node name="Temple" parent="." instance=ExtResource("17_2cr3x")]
+transform = Transform3D(0.00602576, 0, -0.00356234, 0, 0.007, 0, 0.00356234, 0, 0.00602576, 383.099, 156.322, 134.19)
+
+[node name="Label" type="Label" parent="."]
+offset_left = 788.0
+offset_top = 143.0
+offset_right = 1331.0
+offset_bottom = 302.0
+text = "CLIMB THE HILL:
+ATTEIGNEZ LE TEMPLE!"
+label_settings = SubResource("LabelSettings_whbkj")
+
+[node name="apple" parent="." instance=ExtResource("18_tx6l7")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 309.73, 89.7836, 273.452)
+
+[node name="tree_with_apple" parent="." instance=ExtResource("19_3frmk")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 240.431, 88.2566, 299.874)
+
+[node name="tree_with_apple2" parent="." instance=ExtResource("19_3frmk")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 178.626, 95.223, 299.874)
+
+[node name="tree_with_apple3" parent="." instance=ExtResource("19_3frmk")]
+transform = Transform3D(-0.601366, 0, 0.358273, 0, 0.7, 0, -0.358273, 0, -0.601366, 204.546, 94.7995, 309.583)
+
+[node name="tree_with_apple4" parent="." instance=ExtResource("19_3frmk")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 318.382, 102.89, 340.749)
+
+[node name="tree_with_apple5" parent="." instance=ExtResource("19_3frmk")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 356.135, 108.041, 326.371)
+
+[node name="tree_with_apple6" parent="." instance=ExtResource("19_3frmk")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 309, 86.3742, 212.38)
+
+[node name="tree_with_apple7" parent="." instance=ExtResource("19_3frmk")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 360.143, 94.5811, 257.928)
+
+[node name="tree_with_apple8" parent="." instance=ExtResource("19_3frmk")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 423.298, 135.095, 292.73)
+
+[node name="tree_with_apple9" parent="." instance=ExtResource("19_3frmk")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 191.837, 116.891, 424.475)
+
+[node name="tree_with_apple10" parent="." instance=ExtResource("19_3frmk")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 309, 86.3033, 299.874)
+
+[node name="goblin" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(-0.275805, 0, 0.961214, 0, 1, 0, -0.961214, 0, -0.275805, 279.994, 127.946, 158.893)
+
+[node name="goblin14" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(0.195689, 0, -0.980666, 0, 1, 0, 0.980666, 0, 0.195689, 308.315, 127.946, 158.893)
+
+[node name="goblin15" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 313.681, 127.946, 158.893)
+
+[node name="goblin16" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 303.87, 127.946, 158.893)
+
+[node name="goblin2" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 344.664, 110.913, 206.962)
+
+[node name="goblin3" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(0.633097, 0, 0.774072, 0, 1, 0, -0.774072, 0, 0.633097, 315.073, 98.1373, 309.541)
+
+[node name="goblin4" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 367.482, 98.1373, 272.217)
+
+[node name="goblin5" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(0.998328, 0, 0.0578085, 0, 1, 0, -0.0578085, 0, 0.998328, 182.117, 102.864, 370.206)
+
+[node name="goblin19" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(-0.0629642, 0, -0.998016, 0, 1, 0, 0.998016, 0, -0.0629642, 274.895, 105.386, 372.304)
+
+[node name="goblin20" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(-0.653248, 0, -0.757144, 0, 1, 0, 0.757144, 0, -0.653248, 346.243, 122.034, 380.726)
+
+[node name="goblin21" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(0.986124, 0, -0.166011, 0, 1, 0, 0.166011, 0, 0.986124, 354.595, 102.864, 303.692)
+
+[node name="goblin6" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 329.704, 91.3772, 239.861)
+
+[node name="goblin7" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 385.086, 107.437, 228.541)
+
+[node name="goblin8" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(0.104858, 0, 0.994487, 0, 1, 0, -0.994487, 0, 0.104858, 190.148, 99.1277, 288.463)
+
+[node name="goblin17" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(0.991102, 0, -0.133104, 0, 1, 0, 0.133104, 0, 0.991102, 229.025, 94.4886, 318.9)
+
+[node name="goblin18" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(0.309366, 0, -0.950943, 0, 1, 0, 0.950943, 0, 0.309366, 276.436, 94.4886, 288.463)
+
+[node name="goblin9" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(0.539873, 0, -0.841746, 0, 1, 0, 0.841746, 0, 0.539873, 291.239, 103.105, 359.511)
+
+[node name="goblin10" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(0.304931, 0, -0.952375, 0, 1, 0, 0.952375, 0, 0.304931, 367.482, 101.944, 291.021)
+
+[node name="goblin11" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 351.3, 98.1373, 272.217)
+
+[node name="goblin12" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 367.482, 98.1373, 258.067)
+
+[node name="goblin13" parent="." instance=ExtResource("17_cgy6g")]
+transform = Transform3D(0.538874, 0, 0.842387, 0, 1, 0, -0.842387, 0, 0.538874, 323.849, 98.1373, 282.828)
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(4.53636, 0, -0.794523, 0, 1, 0, 1.21551, 0, 2.9652, 381.48, 158.197, 140.354)
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(0.96593, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -0.212944, 0.5, -0.651508)
+shape = SubResource("BoxShape3D_j7thk")
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 393.0
+offset_top = 234.0
+offset_right = 547.0
+offset_bottom = 285.0
+text = "BRAVO!!!"
+label_settings = SubResource("LabelSettings_an2o4")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

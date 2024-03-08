@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6l38x7nlh7rb"]
+
+[ext_resource type="Script" path="res://lib/main.gd" id="1_errq1"]
+[ext_resource type="PackedScene" uid="uid://c75dx1w4lb2hx" path="res://scenes/player.tscn" id="1_km8re"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_errq1")
+
+[node name="Player" parent="." instance=ExtResource("1_km8re")]
+
+[node name="ButtonQuit" type="Button" parent="."]
+offset_right = 33.0
+offset_bottom = 21.0
+text = "Sauvegarder et quitter"
+
+[connection signal="pressed" from="ButtonQuit" to="." method="_on_button_quit_pressed"]

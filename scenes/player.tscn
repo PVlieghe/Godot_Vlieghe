@@ -1,0 +1,98 @@
+[gd_scene load_steps=10 format=3 uid="uid://c75dx1w4lb2hx"]
+
+[ext_resource type="PackedScene" uid="uid://df7yexx07ywv" path="res://models/characters/archer.glb" id="1_2ci5f"]
+[ext_resource type="Script" path="res://lib/player.gd" id="1_pb7wf"]
+[ext_resource type="AnimationLibrary" path="res://assets/animations/player.res" id="3_lgqq8"]
+[ext_resource type="PackedScene" uid="uid://wa16ijpja07w" path="res://scenes/lifeBar.tscn" id="4_mi8mv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_34d8p"]
+size = Vector3(1.18018, 1.11615, 1.48291)
+
+[sub_resource type="GDScript" id="GDScript_k2xkn"]
+script/source = "extends RayCast3D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+"
+
+[sub_resource type="FontFile" id="FontFile_30xgx"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/16/0/kerning_overrides/25/0 = Vector2(0, 0)
+cache/0/25/0/ascent = 0.0
+cache/0/25/0/descent = 0.0
+cache/0/25/0/underline_position = 0.0
+cache/0/25/0/underline_thickness = 0.0
+cache/0/25/0/scale = 1.0
+cache/0/25/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/25/0/kerning_overrides/25/0 = Vector2(0, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_di1vo"]
+font = SubResource("FontFile_30xgx")
+font_size = 25
+font_color = Color(0.529412, 0, 0.145098, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_2kq6d"]
+font_size = 18
+font_color = Color(0, 0, 0, 1)
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 8
+collision_mask = 29
+script = ExtResource("1_pb7wf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.664466, 0, 0, 0, 1.74377, 0, 0, 0, 0.456344, 0, 0.894976, 0)
+shape = SubResource("BoxShape3D_34d8p")
+
+[node name="Character" parent="." instance=ExtResource("1_2ci5f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(-1, 7.6194e-09, -8.70901e-08, 0, 0.996195, 0.0871557, 8.74228e-08, 0.0871557, -0.996195, -0.00325155, 2.08192, -3.65811)
+fov = 60.0
+
+[node name="RayCast3D" type="RayCast3D" parent="Camera"]
+transform = Transform3D(-3, -7.41597e-07, -1.06581e-14, 0, -2.68221e-07, 2.39222, -4.52988e-07, 4.91138, 5.96046e-08, 0, 3.57628e-06, -3.81701)
+collision_mask = 2
+collide_with_areas = true
+script = SubResource("GDScript_k2xkn")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Character")
+libraries = {
+"player": ExtResource("3_lgqq8")
+}
+
+[node name="Control" parent="." instance=ExtResource("4_mi8mv")]
+offset_left = 11.0
+offset_top = 672.0
+offset_right = -1432.0
+offset_bottom = -257.0
+
+[node name="AppleLabel" type="Label" parent="."]
+offset_left = 1000.0
+offset_top = 702.0
+offset_right = 1236.0
+offset_bottom = 755.0
+text = "ppppp"
+label_settings = SubResource("LabelSettings_di1vo")
+
+[node name="ActionLabel" type="Label" parent="."]
+offset_left = 563.0
+offset_top = 708.0
+offset_right = 737.0
+offset_bottom = 743.0
+text = "dddddd"
+label_settings = SubResource("LabelSettings_2kq6d")

@@ -1,0 +1,131 @@
+[gd_scene load_steps=5 format=3 uid="uid://wa16ijpja07w"]
+
+[ext_resource type="Theme" uid="uid://bhptsqlftfy1c" path="res://assets/ui ressources/health_bar_theme.tres" id="1_gaknm"]
+
+[sub_resource type="GDScript" id="GDScript_k8u4w"]
+script/source = "extends Control
+
+@onready var lifeBar:ProgressBar = $ProgressBar
+@onready var labelPoint:Label = $labelLifePoint
+
+var lastDif:float 
+var valueHasChanged:bool = false
+var noChange = StyleBoxFlat.new()
+var plusChange = StyleBoxFlat.new()
+var lessChange = StyleBoxFlat.new()
+var timeLeft = 0.5
+
+var initial_position = Vector2()
+var target_position = Vector2()
+var move_speed = 500.0
+var fade_out_speed = 0.5
+var fade_out_duration = 1.0
+var fade_timer = 0.0
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	lifeBar.add_theme_stylebox_override(\"background\", plusChange)
+	plusChange.bg_color = Color.GRAY
+	lifeBar.add_theme_stylebox_override(\"fill\", plusChange)
+	plusChange.bg_color = Color.BLUE
+	labelPoint.visible=false
+	
+	initial_position = labelPoint.position
+	target_position = initial_position - Vector2(0, 50)
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	if valueHasChanged == true:
+		if lastDif > 0 : 
+			lifeBar.add_theme_stylebox_override(\"background\", plusChange)
+			plusChange.bg_color = Color.GRAY
+			lifeBar.add_theme_stylebox_override(\"fill\", plusChange)
+			plusChange.bg_color = Color.GREEN
+			
+		else:
+			lifeBar.add_theme_stylebox_override(\"background\", plusChange)
+			plusChange.bg_color = Color.GRAY
+			lifeBar.add_theme_stylebox_override(\"fill\", plusChange)
+			plusChange.bg_color = Color.RED
+				# Réduire le temps restant
+		timeLeft -= delta
+		if timeLeft < 0:
+			lifeBar.add_theme_stylebox_override(\"background\", plusChange)
+			plusChange.bg_color = Color.GRAY
+			lifeBar.add_theme_stylebox_override(\"fill\", plusChange)
+			plusChange.bg_color = Color.BLUE
+			valueHasChanged = false
+			timeLeft = 0.5
+			
+		if labelPoint.position.distance_to(target_position) > 1.0:
+			labelPoint.position = labelPoint.position.move_toward(target_position, move_speed * delta)
+		else:
+			move_speed-=50.0 * delta
+			if move_speed < 0.0:
+				move_speed = 0.0
+			if fade_timer <=0:
+				fade_timer -= delta
+				if fade_timer == 0:
+					labelPoint.queue_free()
+				else:
+					labelPoint.modulate.a = fade_timer / fade_out_duration
+				
+func change_value(dif:float): 
+	lastDif = dif
+	lifeBar.value += dif
+	valueHasChanged = true
+	
+func show_value(value:float):
+	 # Réinitialise les valeurs et affiche le label
+	labelPoint.position = initial_position
+	move_speed = 500.0
+	fade_timer = 0.0
+	labelPoint.modulate.a = 1.0
+	labelPoint.visible = true
+	
+
+	
+	
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ccxlo"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_fwbsm"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_k8u4w")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 83.0
+offset_right = 327.0
+offset_bottom = 126.0
+theme = ExtResource("1_gaknm")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.878431, 0, 0, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_ccxlo")
+value = 63.0
+
+[node name="labelLifePoint" type="Label" parent="."]
+layout_mode = 0
+offset_left = 195.0
+offset_top = 48.0
+offset_right = 235.0
+offset_bottom = 83.0
+text = "exemple"
+label_settings = SubResource("LabelSettings_fwbsm")
